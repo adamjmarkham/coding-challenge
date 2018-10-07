@@ -6,6 +6,7 @@
 * There is only one investment and mortgage product type
 * All amounts are stored in pennies to avoid rounding errors
 * All interest made on loan goes back to investors (no cut for Landbay)
+* Each investment made into a loan is unique
 
 ## Create a loan
 
@@ -19,7 +20,7 @@ Creates a loan that a lender can invest into
 
 ```json
 {
-    "amount": "20000000",
+    "amount": 20000000,
     "annualInterest": "3.4",
     "propertyAddress": {
       "street": "London Road",
@@ -41,6 +42,7 @@ Creates a loan that a lender can invest into
 ```json
 {
     "id": 1,
+    "amount": 20000000,
     "annualInterest": "3.4",
     "propertyAddress": {
       "street": "London Road",
@@ -70,7 +72,7 @@ loanId - id of loan returned in created response
 ```json
 {
     "id": 1,
-    "amount": "20000000",
+    "amount": 20000000,
     "annualInterest": "3.4",
     "propertyAddress": {
       "street": "London Road",
@@ -117,7 +119,7 @@ loanId - id of loan to delete
 
 ```json
 {
-    "amount": "100000"
+    "amount": 100000
 }
 ```
 
@@ -130,6 +132,6 @@ loanId - id of loan to delete
 ```json
 {
     "id": 1,
-    "amount": "100000"
+    "amount": 100000
 }
 ```
