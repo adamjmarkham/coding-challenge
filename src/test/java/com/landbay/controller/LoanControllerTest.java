@@ -14,18 +14,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(LoanController.class)
 public class LoanControllerTest {
+
+    private static final Loan TEST_LOAN = getTestLoan();
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,9 +35,7 @@ public class LoanControllerTest {
 
     @Before
     public void setup() {
-        Loan loan = getTestLoan();
-
-        given(loanService.getLoan(1)).willReturn(loan);
+        given(loanService.getLoan(1)).willReturn(TEST_LOAN);
     }
 
     @Test
@@ -47,8 +45,28 @@ public class LoanControllerTest {
     }
 
     @Test
+    public void createALoanReturns200() throws Exception {
+        String loanBody = testLoanJson();
+
+        mockMvc.perform(post("/api/loan")
+                .content(loanBody)
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void getALoanReturnsContentType() throws Exception {
         mockMvc.perform(get("/api/loan/1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+    }
+
+    @Test
+    public void createALoanReturnsContentType() throws Exception {
+        String loanBody = testLoanJson();
+
+        mockMvc.perform(post("/api/loan")
+                .content(loanBody)
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
@@ -66,15 +84,49 @@ public class LoanControllerTest {
                 .andExpect(jsonPath("propertyAddress.postCode", is("CR7 7PB")));
     }
 
-    private Loan getTestLoan() {
+    @Test
+    public void creatingALoanReturnsLoanId() throws Exception {
+        String loanBody = testLoanJson();
+
+        Loan testLoan = testLoanWithoutId();
+
+        given(loanService.createLoan(testLoan)).willReturn(1);
+
+        mockMvc.perform(post("/api/loan")
+                .content(loanBody)
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("id", is(1)));
+    }
+
+    private Loan testLoanWithoutId() {
+        Loan testLoan = getTestLoan();
+        testLoan.setId(null);
+        return testLoan;
+    }
+
+    private String testLoanJson() {
+        return "{\n" +
+                "\t\"amount\": 20000000,\n" +
+                "\t\"annualInterest\": 3.4,\n" +
+                "\t\"propertyAddress\": {\n" +
+                "\t\t\"street\": \"London Road\",\n" +
+                "\t\t\"number\": 18,\n" +
+                "\t\t\"city\": \"London\",\n" +
+                "\t\t\"postCode\": \"CR7 7PB\"\n" +
+                "\t},\n" +
+                "\t\"term\": 25,\n" +
+                "\t\"investments\": null,\n" +
+                "\t\"endDate\": \"2043-10-04\"\n" +
+                "}";
+    }
+
+    private static Loan getTestLoan() {
         Loan loan = new Loan();
         loan.setId(1);
         loan.setAnnualInterest(new BigDecimal("3.4"));
         loan.setTerm(25);
         loan.setAmount(20000000);
-
-        Date endDate = new GregorianCalendar(2043, Calendar.OCTOBER, 5).getTime();
-        loan.setEndDate(endDate);
+        loan.setEndDate("2043-10-04");
 
         PropertyAddress propertyAddress = new PropertyAddress();
         propertyAddress.setNumber(18);

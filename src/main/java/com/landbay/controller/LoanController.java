@@ -3,12 +3,8 @@ package com.landbay.controller;
 import com.landbay.model.Loan;
 import com.landbay.service.LoanService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/loan")
@@ -20,9 +16,18 @@ public class LoanController {
         this.loanService = loanService;
     }
 
-    @GetMapping(value = "/{loanId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{loanId}")
     public ResponseEntity<Loan> getLoan(@PathVariable(value = "loanId") int loanId) {
         Loan loan = loanService.getLoan(loanId);
+
+        return new ResponseEntity<>(loan, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Loan> createLoan(@RequestBody Loan loan) {
+        int id = loanService.createLoan(loan);
+
+        loan.setId(id);
 
         return new ResponseEntity<>(loan, HttpStatus.OK);
     }

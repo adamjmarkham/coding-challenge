@@ -1,5 +1,7 @@
 package com.landbay.model;
 
+import java.util.Objects;
+
 public class PropertyAddress {
 
     private String street;
@@ -37,5 +39,21 @@ public class PropertyAddress {
 
     public void setPostCode(String postCode) {
         this.postCode = postCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (!(o instanceof PropertyAddress)) { return false; }
+        PropertyAddress that = (PropertyAddress) o;
+        return number == that.number &&
+                Objects.equals(street, that.street) &&
+                Objects.equals(city, that.city) &&
+                Objects.equals(postCode, that.postCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(street, number, city, postCode);
     }
 }

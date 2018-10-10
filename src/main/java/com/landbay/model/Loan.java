@@ -1,27 +1,24 @@
 package com.landbay.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 public class Loan {
 
-    private int id;
+    private Integer id;
     private long amount;
     private BigDecimal annualInterest;
     private PropertyAddress propertyAddress;
     private int term;
     private Set<Investment> investments;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
-    private Date endDate;
+    private String endDate;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -65,11 +62,30 @@ public class Loan {
         this.investments = investments;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (!(o instanceof Loan)) { return false; }
+        Loan loan = (Loan) o;
+        return amount == loan.amount &&
+                term == loan.term &&
+                Objects.equals(id, loan.id) &&
+                Objects.equals(annualInterest, loan.annualInterest) &&
+                Objects.equals(propertyAddress, loan.propertyAddress) &&
+                Objects.equals(investments, loan.investments) &&
+                Objects.equals(endDate, loan.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amount, annualInterest, propertyAddress, term, investments, endDate);
     }
 }
