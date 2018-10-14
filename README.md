@@ -8,6 +8,18 @@
 * All interest made on loan goes back to investors (no cut for Landbay)
 * Each investment made into a loan is unique
 * Validation of fields is not required
+* In memory database (non-production) is used when application starts up
+
+## How to run
+
+* Build using 
+``
+./mvnw clean package
+`` 
+* Run using:
+``
+java -jar target/coding-challenge-0.0.1-SNAPSHOT.jar
+``
 
 ## Create a loan
 
