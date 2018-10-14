@@ -24,8 +24,6 @@ public class LoanServiceEndToEndTest {
     @Autowired
     private LoanRepository loanRepository;
 
-    private final Loan testLoan = testLoanWithoutId();
-
     @Before
     public void setup() {
         loanRepository.deleteAll();
