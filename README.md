@@ -111,7 +111,7 @@ loanId - id of loan to delete
 
 **URL** : `/api/investment/{loanId}`
 
-loanId - id of loan to delete
+loanId - id of loan to invest into
 
 **Method** : `POST`
 

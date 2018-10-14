@@ -15,7 +15,7 @@ public class RepositoryBackedLoanService implements LoanService {
 
     @Override
     public Loan getLoan(int id) {
-        return loanRepository.findById(id).get();
+        return loanRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -23,5 +23,10 @@ public class RepositoryBackedLoanService implements LoanService {
         Loan createdLoan = loanRepository.save(testLoan);
 
         return createdLoan.getId();
+    }
+
+    @Override
+    public void deleteLoan(int id) {
+        loanRepository.deleteById(id);
     }
 }

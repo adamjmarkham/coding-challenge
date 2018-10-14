@@ -31,4 +31,11 @@ public class LoanController {
 
         return new ResponseEntity<>(loan, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{loanId}")
+    public ResponseEntity<Loan> deleteLoan(@PathVariable(value = "loanId") int loanId) {
+        loanService.deleteLoan(loanId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

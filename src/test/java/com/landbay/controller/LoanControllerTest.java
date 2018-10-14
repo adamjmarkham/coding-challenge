@@ -17,8 +17,9 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -52,6 +53,14 @@ public class LoanControllerTest {
                 .content(loanBody)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteALoanReturns204() throws Exception {
+        mockMvc.perform(delete("/api/loan/1"))
+                .andExpect(status().isNoContent());
+
+        then(loanService).should(times(1)).deleteLoan(1);
     }
 
     @Test
