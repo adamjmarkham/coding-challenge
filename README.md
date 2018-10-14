@@ -7,6 +7,7 @@
 * All amounts are stored in pennies to avoid rounding errors
 * All interest made on loan goes back to investors (no cut for Landbay)
 * Each investment made into a loan is unique
+* Validation of fields is not required
 
 ## Create a loan
 
