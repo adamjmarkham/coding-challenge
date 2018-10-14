@@ -1,16 +1,22 @@
 package com.landbay.model;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class Loan {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
     private long amount;
     private BigDecimal annualInterest;
+    @Embedded
     private PropertyAddress propertyAddress;
     private int term;
+    @Embedded
     private Set<Investment> investments;
     private String endDate;
 

@@ -75,7 +75,7 @@ public class LoanControllerTest {
         mockMvc.perform(get("/api/loan/1"))
                 .andExpect(jsonPath("id", is(1)))
                 .andExpect(jsonPath("amount", is(20000000)))
-                .andExpect(jsonPath("annualInterest", is(3.4)))
+                .andExpect(jsonPath("annualInterest", is(3.40)))
                 .andExpect(jsonPath("term", is(25)))
                 .andExpect(jsonPath("endDate", is("2043-10-04")))
                 .andExpect(jsonPath("propertyAddress.number", is(18)))
