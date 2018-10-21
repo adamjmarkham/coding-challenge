@@ -6,6 +6,7 @@ public class InvestmentCreateRequest {
 
     private long amount;
     private int loanId;
+    private int lenderId;
 
     public long getAmount() {
         return amount;
@@ -23,17 +24,26 @@ public class InvestmentCreateRequest {
         this.loanId = loanId;
     }
 
+    public int getLenderId() {
+        return lenderId;
+    }
+
+    public void setLenderId(int lenderId) {
+        this.lenderId = lenderId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (!(o instanceof InvestmentCreateRequest)) { return false; }
         InvestmentCreateRequest that = (InvestmentCreateRequest) o;
         return amount == that.amount &&
-                Objects.equals(loanId, that.loanId);
+                loanId == that.loanId &&
+                lenderId == that.lenderId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(amount, loanId);
+        return Objects.hash(amount, loanId, lenderId);
     }
 }

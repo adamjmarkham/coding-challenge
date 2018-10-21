@@ -30,9 +30,10 @@ public class InvestmentController {
     @PostMapping
     public ResponseEntity<InvestmentDTO> createInvestment(@RequestBody InvestmentCreateRequest investmentCreateRequest) {
         long amount = investmentCreateRequest.getAmount();
+        int lenderId = investmentCreateRequest.getLenderId();
         Loan loan = loanService.getLoan(investmentCreateRequest.getLoanId());
 
-        Investment investment = investmentService.createInvestment(amount, loan);
+        Investment investment = investmentService.createInvestment(amount, loan, lenderId);
 
         return new ResponseEntity<>(convertToDTO(investment), HttpStatus.OK);
     }

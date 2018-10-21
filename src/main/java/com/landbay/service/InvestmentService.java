@@ -5,5 +5,5 @@ import com.landbay.model.internal.Loan;
 
 public interface InvestmentService {
 
-    Investment createInvestment(long amount, Loan loan);
+    Investment createInvestment(long amount, Loan loan, int lenderId);
 }

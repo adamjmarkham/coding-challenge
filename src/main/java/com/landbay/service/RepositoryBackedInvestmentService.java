@@ -15,10 +15,11 @@ public class RepositoryBackedInvestmentService implements InvestmentService {
     }
 
     @Override
-    public Investment createInvestment(long amount, Loan loan) {
+    public Investment createInvestment(long amount, Loan loan, int lenderId) {
         Investment investment = new Investment();
         investment.setAmount(amount);
         investment.setLoan(loan);
+        investment.setLenderId(lenderId);
 
         Investment createdInvestment = investmentRepository.save(investment);
 

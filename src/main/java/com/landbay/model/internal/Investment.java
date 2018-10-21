@@ -1,7 +1,6 @@
 package com.landbay.model.internal;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class Investment {
@@ -12,6 +11,7 @@ public class Investment {
     private long amount;
     @ManyToOne
     private Loan loan;
+    private int lenderId;
 
     public void setId(int id) {
         this.id = id;
@@ -23,6 +23,10 @@ public class Investment {
 
     public void setLoan(Loan loan) {
         this.loan = loan;
+    }
+
+    public void setLenderId(int lenderId) {
+        this.lenderId = lenderId;
     }
 
     public int getId() {
@@ -37,17 +41,7 @@ public class Investment {
         return loan;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (!(o instanceof Investment)) { return false; }
-        Investment that = (Investment) o;
-        return id == that.id &&
-                amount == that.amount;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, amount);
+    public int getLenderId() {
+        return lenderId;
     }
 }

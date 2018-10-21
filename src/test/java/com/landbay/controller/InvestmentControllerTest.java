@@ -38,7 +38,7 @@ public class InvestmentControllerTest {
     @Before
     public void setup() {
         given(loanService.getLoan(1)).willReturn(TEST_LOAN);
-        given(investmentService.createInvestment(1000, TEST_LOAN)).willReturn(testInvestment());
+        given(investmentService.createInvestment(1000, TEST_LOAN, 1)).willReturn(testInvestment());
 
     }
 
@@ -65,6 +65,7 @@ public class InvestmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
                 .andExpect(jsonPath("amount", is(1000)))
+                .andExpect(jsonPath("lenderId", is(1)))
                 .andExpect(jsonPath("loan.id", is(1)))
                 .andExpect(jsonPath("loan.amount", is(20000000)))
                 .andExpect(jsonPath("loan.annualInterest", is(3.40)))
@@ -79,7 +80,8 @@ public class InvestmentControllerTest {
     private String testInvestmentCreateJson() {
         return "{\n" +
                 "\t\"amount\": 1000,\n" +
-                "\t\"loanId\": 1\n" +
+                "\t\"loanId\": 1,\n" +
+                "\t\"lenderId\": 1\n" +
                 "}";
     }
 }

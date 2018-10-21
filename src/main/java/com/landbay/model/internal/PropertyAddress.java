@@ -1,7 +1,5 @@
 package com.landbay.model.internal;
 
-import java.util.Objects;
-
 public class PropertyAddress {
 
     private String street;
@@ -45,15 +43,21 @@ public class PropertyAddress {
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (!(o instanceof PropertyAddress)) { return false; }
+
         PropertyAddress that = (PropertyAddress) o;
-        return number == that.number &&
-                Objects.equals(street, that.street) &&
-                Objects.equals(city, that.city) &&
-                Objects.equals(postCode, that.postCode);
+
+        if (number != that.number) { return false; }
+        if (street != null ? !street.equals(that.street) : that.street != null) { return false; }
+        if (city != null ? !city.equals(that.city) : that.city != null) { return false; }
+        return postCode != null ? postCode.equals(that.postCode) : that.postCode == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(street, number, city, postCode);
+        int result = street != null ? street.hashCode() : 0;
+        result = 31 * result + number;
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (postCode != null ? postCode.hashCode() : 0);
+        return result;
     }
 }
