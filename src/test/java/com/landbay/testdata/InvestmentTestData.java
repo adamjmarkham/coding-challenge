@@ -17,6 +17,7 @@ public class InvestmentTestData {
         investment.setId(1);
         investment.setAmount(1000);
         investment.setLoan(LoanTestData.getTestLoan());
+        investment.setLenderId(1);
         return investment;
     }
 }
