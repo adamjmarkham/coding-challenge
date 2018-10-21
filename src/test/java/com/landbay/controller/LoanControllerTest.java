@@ -1,7 +1,7 @@
 package com.landbay.controller;
 
-import com.landbay.model.Loan;
-import com.landbay.model.PropertyAddress;
+import com.landbay.model.internal.Loan;
+import com.landbay.model.internal.PropertyAddress;
 import com.landbay.service.LoanService;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.landbay.model;
+package com.landbay.model.internal;
 
 import java.util.Objects;
 

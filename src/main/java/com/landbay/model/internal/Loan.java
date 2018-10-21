@@ -1,4 +1,4 @@
-package com.landbay.model;
+package com.landbay.model.internal;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,7 +16,7 @@ public class Loan {
     @Embedded
     private PropertyAddress propertyAddress;
     private int term;
-    @Embedded
+    @OneToMany(mappedBy = "loan", orphanRemoval = true)
     private Set<Investment> investments;
     private String endDate;
 

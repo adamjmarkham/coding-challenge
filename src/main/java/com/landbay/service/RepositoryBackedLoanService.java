@@ -1,6 +1,6 @@
 package com.landbay.service;
 
-import com.landbay.model.Loan;
+import com.landbay.model.internal.Loan;
 import com.landbay.repository.LoanRepository;
 import org.springframework.stereotype.Component;
 

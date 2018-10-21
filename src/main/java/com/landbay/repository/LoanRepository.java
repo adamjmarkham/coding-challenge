@@ -1,6 +1,6 @@
 package com.landbay.repository;
 
-import com.landbay.model.Loan;
+import com.landbay.model.internal.Loan;
 import org.springframework.data.repository.CrudRepository;
 
 public interface LoanRepository extends CrudRepository<Loan, Integer> {

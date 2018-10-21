@@ -1,11 +1,17 @@
-package com.landbay.model;
+package com.landbay.model.internal;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
 public class Investment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private long amount;
+    @ManyToOne
+    private Loan loan;
 
     public void setId(int id) {
         this.id = id;
@@ -13,6 +19,22 @@ public class Investment {
 
     public void setAmount(long amount) {
         this.amount = amount;
+    }
+
+    public void setLoan(Loan loan) {
+        this.loan = loan;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public long getAmount() {
+        return amount;
+    }
+
+    public Loan getLoan() {
+        return loan;
     }
 
     @Override

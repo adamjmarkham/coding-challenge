@@ -1,7 +1,7 @@
 package com.landbay.testdata;
 
-import com.landbay.model.Loan;
-import com.landbay.model.PropertyAddress;
+import com.landbay.model.internal.Loan;
+import com.landbay.model.internal.PropertyAddress;
 
 import java.math.BigDecimal;
 
