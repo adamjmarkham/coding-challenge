@@ -20,12 +20,11 @@ public class InvestmentController {
 
     private final InvestmentService investmentService;
     private final LoanService loanService;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
 
-    public InvestmentController(InvestmentService investmentService, LoanService loanService, ModelMapper modelMapper) {
+    public InvestmentController(InvestmentService investmentService, LoanService loanService) {
         this.investmentService = investmentService;
         this.loanService = loanService;
-        this.modelMapper = modelMapper;
     }
 
     @PostMapping

@@ -79,13 +79,18 @@ public class LoanEndToEndTest {
         investmentCreateRequest.setAmount(1000);
         investmentCreateRequest.setLoanId(loan.getId());
 
-        InvestmentDTO investment = restTemplate.postForObject("/api/investment", investmentCreateRequest,
-                InvestmentDTO.class);
+        createInvestment(investmentCreateRequest);
 
         InvestableLoanDTO investableLoan = getLoanDTO(loan.getId());
 
         assertThat(investableLoan.getInvestments(), contains(investmentAmount(1000)));
         assertThat(investableLoan.getInvestments(), contains(investmentInto(loan)));
+    }
+
+    private void createInvestment(InvestmentCreateRequest investmentCreateRequest) {
+        restTemplate.postForObject("/api/investment", investmentCreateRequest,
+                InvestmentDTO.class
+        );
     }
 
     private Matcher<InvestmentDTO> investmentInto(Loan loan) {

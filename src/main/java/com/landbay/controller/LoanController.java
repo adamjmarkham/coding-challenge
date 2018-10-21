@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class LoanController {
 
     private final LoanService loanService;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
 
-    public LoanController(LoanService loanService, ModelMapper modelMapper) {
+    public LoanController(LoanService loanService) {
         this.loanService = loanService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/{loanId}")
