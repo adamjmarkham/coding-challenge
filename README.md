@@ -11,6 +11,7 @@
 * In memory database (non-production) is used when application starts up
 * Step 3 says investments are valid for a day so we need to calculate interest per day for investment rather than monthly and return total over a specified period
 * Assume that a year has 365 days for purpose of this challenge
+* Lender id is just an id for now, as we have no way of currently managing users
 
 ## How to run
 
@@ -99,11 +100,13 @@ loanId - id of loan returned in created response
     "investments": [
       {
           "id": 1,
-          "amount": "100000"
+          "amount": "100000",
+          "lenderId": 1
       },
       {
           "id": 2,
-          "amount": "200000"
+          "amount": "200000",
+          "lenderId": 2
       }
     ],
     "endDate": "2043-10-04"
