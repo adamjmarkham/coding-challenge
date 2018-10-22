@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.landbay.testdata.DateTestData.*;
 import static com.landbay.testdata.LoanTestData.testLoanWithoutId;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
@@ -90,7 +91,7 @@ public class LoanEndToEndTest {
     }
 
     @Test
-    public void canGetMonthlyInterestOwedOnInvestments() {
+    public void canGetInterestOwedOnInvestmentsOverDateRange() {
         Loan loan = createLoan(testLoanWithoutId());
 
         InvestmentCreateRequest investmentCreateRequestOne = investmentCreateRequest(loan, 1000);
@@ -99,7 +100,7 @@ public class LoanEndToEndTest {
         createInvestment(investmentCreateRequestOne);
         createInvestment(investmentCreateRequestTwo);
 
-        getLoanWithInvestments(loan.getId());
+        LoanWithInvestmentsDTO loanWithInvestments = getLoanWithInvestments(loan.getId());
 
         InterestOwedResult monthlyInterestOwed = getMonthlyInterestOwed(LENDER_ID);
 
@@ -111,6 +112,8 @@ public class LoanEndToEndTest {
         investmentCreateRequest.setAmount(amount);
         investmentCreateRequest.setLoanId(loan.getId());
         investmentCreateRequest.setLenderId(LENDER_ID);
+        investmentCreateRequest.setStartDate(yesterday());
+        investmentCreateRequest.setEndDate(oneMonth());
         return investmentCreateRequest;
     }
 
@@ -162,6 +165,8 @@ public class LoanEndToEndTest {
     }
 
     private InterestOwedResult getMonthlyInterestOwed(int lenderId) {
-        return restTemplate.getForObject("/api/investment/interest/" + lenderId, InterestOwedResult.class);
+        return restTemplate.getForObject("/api/investment/interest/" + lenderId + "?start=" + YESTERDAY + "&end=" + ONE_MONTH,
+                InterestOwedResult.class
+        );
     }
 }

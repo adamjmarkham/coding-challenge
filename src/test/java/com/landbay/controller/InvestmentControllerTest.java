@@ -1,5 +1,6 @@
 package com.landbay.controller;
 
+import com.landbay.model.internal.InvestmentPeriod;
 import com.landbay.model.internal.Loan;
 import com.landbay.service.InvestmentService;
 import com.landbay.service.LoanService;
@@ -13,8 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.landbay.testdata.InvestmentTestData.interestOwedResult;
-import static com.landbay.testdata.InvestmentTestData.testInvestment;
+import static com.landbay.testdata.DateTestData.*;
+import static com.landbay.testdata.InvestmentTestData.*;
 import static com.landbay.testdata.LoanTestData.getTestLoan;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
@@ -42,9 +43,9 @@ public class InvestmentControllerTest {
     @Before
     public void setup() {
         given(loanService.getLoan(1)).willReturn(TEST_LOAN);
-        given(investmentService.createInvestment(1000, TEST_LOAN, 1)).willReturn(testInvestment());
-        given(investmentService.calculateInterestOwed(LENDER_ID)).willReturn(interestOwedResult(TOTAL_INTEREST_OWED));
-
+        given(investmentService.createInvestment(testInvestmentCreateRequest(), TEST_LOAN)).willReturn(testInvestment());
+        InvestmentPeriod investmentPeriod = new InvestmentPeriod(yesterday(), oneMonth());
+        given(investmentService.calculateInterestOwed(LENDER_ID, investmentPeriod)).willReturn(interestOwedResult(TOTAL_INTEREST_OWED));
     }
 
     @Test
@@ -84,19 +85,28 @@ public class InvestmentControllerTest {
 
     @Test
     public void getMonthlyInterestReturns200() throws Exception {
-        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID)
+                .param("start", YESTERDAY)
+                .param("end", ONE_MONTH)
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getMonthlyInterestReturnsContentType() throws Exception {
-        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .param("start", YESTERDAY)
+                .param("end", ONE_MONTH))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
     public void getMonthlyInterestReturnsJson() throws Exception {
-        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .param("start", YESTERDAY)
+                .param("end", ONE_MONTH))
                 .andExpect(jsonPath("total", is(TOTAL_INTEREST_OWED)));
     }
 
@@ -104,7 +114,9 @@ public class InvestmentControllerTest {
         return "{\n" +
                 "\t\"amount\": 1000,\n" +
                 "\t\"loanId\": 1,\n" +
-                "\t\"lenderId\": 1\n" +
+                "\t\"lenderId\": 1,\n" +
+                "\t\"startDate\": \"" + YESTERDAY + "\",\n" +
+                "\t\"endDate\": \"" + ONE_MONTH + "\"\n" +
                 "}";
     }
 }

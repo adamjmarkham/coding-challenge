@@ -1,6 +1,7 @@
 package com.landbay.model.internal;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Investment {
@@ -12,6 +13,8 @@ public class Investment {
     @ManyToOne
     private Loan loan;
     private int lenderId;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public void setId(int id) {
         this.id = id;
@@ -29,6 +32,14 @@ public class Investment {
         this.lenderId = lenderId;
     }
 
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
     public int getId() {
         return id;
     }
@@ -43,5 +54,13 @@ public class Investment {
 
     public int getLenderId() {
         return lenderId;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
     }
 }
