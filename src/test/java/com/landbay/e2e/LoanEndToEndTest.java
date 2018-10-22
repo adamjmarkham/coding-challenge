@@ -90,7 +90,7 @@ public class LoanEndToEndTest {
     }
 
     @Test
-    public void canGetMonthlyInterestOwedOnInvestments() {
+    public void canGetInterestOwedOnInvestmentsOverAPeriod() {
         Loan loan = createLoan(testLoanWithoutId());
 
         InvestmentCreateRequest investmentCreateRequestOne = investmentCreateRequest(loan, 1000);
@@ -101,9 +101,9 @@ public class LoanEndToEndTest {
 
         getLoanWithInvestments(loan.getId());
 
-        InterestOwedResult monthlyInterestOwed = getMonthlyInterestOwed(LENDER_ID);
+        InterestOwedResult monthlyInterestOwed = getInterestOwedOverAPeriod(LENDER_ID, "2018-10-21", "2018-11-21");
 
-        assertThat(monthlyInterestOwed.getTotal(), equalTo(5l));
+        assertThat(monthlyInterestOwed.getTotal(), equalTo(6l));
     }
 
     private InvestmentCreateRequest investmentCreateRequest(Loan loan, int amount) {
@@ -163,5 +163,9 @@ public class LoanEndToEndTest {
 
     private InterestOwedResult getMonthlyInterestOwed(int lenderId) {
         return restTemplate.getForObject("/api/investment/interest/" + lenderId, InterestOwedResult.class);
+    }
+
+    private InterestOwedResult getInterestOwedOverAPeriod(int lenderId, String startDate, String endDate) {
+        return restTemplate.getForObject("/api/investment/interest/" + lenderId + "?start=" + startDate + "&end=" + endDate, InterestOwedResult.class);
     }
 }

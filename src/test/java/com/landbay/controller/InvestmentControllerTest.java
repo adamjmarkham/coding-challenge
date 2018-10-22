@@ -29,6 +29,7 @@ public class InvestmentControllerTest {
     private static final Loan TEST_LOAN = getTestLoan();
     private static final int LENDER_ID = 1;
     private static final int TOTAL_INTEREST_OWED = 20;
+    private static final int PERIOD = 31;
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,7 +44,7 @@ public class InvestmentControllerTest {
     public void setup() {
         given(loanService.getLoan(1)).willReturn(TEST_LOAN);
         given(investmentService.createInvestment(1000, TEST_LOAN, 1)).willReturn(testInvestment());
-        given(investmentService.calculateInterestOwed(LENDER_ID)).willReturn(interestOwedResult(TOTAL_INTEREST_OWED));
+        given(investmentService.calculateInterestOwed(LENDER_ID, PERIOD)).willReturn(interestOwedResult(TOTAL_INTEREST_OWED));
 
     }
 
@@ -83,20 +84,29 @@ public class InvestmentControllerTest {
     }
 
     @Test
-    public void getMonthlyInterestReturns200() throws Exception {
-        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+    public void getInterestOverPeriodReturns200() throws Exception {
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID)
+                .param("start", "2018-10-21")
+                .param("end", "2018-11-21")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void getMonthlyInterestReturnsContentType() throws Exception {
-        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+    public void getInterestOverPeriodReturnsContentType() throws Exception {
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID)
+                .param("start", "2018-10-21")
+                .param("end", "2018-11-21")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 
     @Test
-    public void getMonthlyInterestReturnsJson() throws Exception {
-        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+    public void getInterestOverPeriodReturnsJson() throws Exception {
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID)
+                .param("start", "2018-10-21")
+                .param("end", "2018-11-21")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("total", is(TOTAL_INTEREST_OWED)));
     }
 
@@ -104,7 +114,9 @@ public class InvestmentControllerTest {
         return "{\n" +
                 "\t\"amount\": 1000,\n" +
                 "\t\"loanId\": 1,\n" +
-                "\t\"lenderId\": 1\n" +
+                "\t\"lenderId\": 1,\n" +
+                "\t\"start\": \"2018-10-21\",\n" +
+                "\t\"end\": \"2018-11-21\"\n" +
                 "}";
     }
 }

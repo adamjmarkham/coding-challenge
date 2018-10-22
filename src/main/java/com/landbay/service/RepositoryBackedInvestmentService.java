@@ -36,7 +36,7 @@ public class RepositoryBackedInvestmentService implements InvestmentService {
     }
 
     @Override
-    public InterestOwedResult calculateInterestOwed(int lenderId) {
+    public InterestOwedResult calculateInterestOwed(int lenderId, long period) {
         Set<Investment> investments = investmentRepository.findByLenderId(lenderId);
 
         List<InterestOwedCalculationInput> interestOwedInputs = investments.stream()
@@ -49,6 +49,6 @@ public class RepositoryBackedInvestmentService implements InvestmentService {
                 })
                 .collect(toList());
 
-        return interestCalculator.calculateInterest(interestOwedInputs);
+        return interestCalculator.calculateInterest(interestOwedInputs, period);
     }
 }

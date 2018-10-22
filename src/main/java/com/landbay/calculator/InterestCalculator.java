@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface InterestCalculator {
 
-    InterestOwedResult calculateInterest(List<InterestOwedCalculationInput> inputs);
+    InterestOwedResult calculateInterest(List<InterestOwedCalculationInput> inputs, long period);
 }

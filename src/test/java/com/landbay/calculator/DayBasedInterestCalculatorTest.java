@@ -11,12 +11,13 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class MonthlyInterestCalculatorTest {
+public class DayBasedInterestCalculatorTest {
 
-    private final MonthlyInterestCalculator calculator = new MonthlyInterestCalculator();
+    private final DayBasedInterestCalculator calculator = new DayBasedInterestCalculator();
+    private int period = 30;
 
     @Test
-    public void canCalculateMonthlyInterestOwedOnMultipleInvestments() {
+    public void canCalculateInterestOwedOnMultipleInvestments() {
         List<InterestOwedCalculationInput> inputs = new ArrayList<>();
 
         int investmentAmount = 1000;
@@ -24,9 +25,9 @@ public class MonthlyInterestCalculatorTest {
         inputs.add(interestCalculationInput(investmentAmount, annualInterestRate));
         inputs.add(interestCalculationInput(investmentAmount, annualInterestRate));
 
-        InterestOwedResult interestOwed = calculator.calculateInterest(inputs);
+        InterestOwedResult interestOwed = calculator.calculateInterest(inputs, period);
 
-        assertThat(interestOwed.getTotal(), equalTo(16L));
+        assertThat(interestOwed.getTotal(), equalTo(18L));
     }
 
     @Test
@@ -37,9 +38,9 @@ public class MonthlyInterestCalculatorTest {
         String annualInterestRate = "3.4";
         inputs.add(interestCalculationInput(investmentAmount, annualInterestRate));
 
-        InterestOwedResult interestOwed = calculator.calculateInterest(inputs);
+        InterestOwedResult interestOwed = calculator.calculateInterest(inputs, period);
 
-        assertThat(interestOwed.getTotal(), equalTo(2L));
+        assertThat(interestOwed.getTotal(), equalTo(3L));
     }
 
     private InterestOwedCalculationInput interestCalculationInput(int amount, String interestRate) {

@@ -8,5 +8,5 @@ public interface InvestmentService {
 
     Investment createInvestment(long amount, Loan loan, int lenderId);
 
-    InterestOwedResult calculateInterestOwed(int lenderId);
+    InterestOwedResult calculateInterestOwed(int lenderId, long period);
 }
