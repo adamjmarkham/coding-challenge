@@ -100,12 +100,12 @@ loanId - id of loan returned in created response
     "investments": [
       {
           "id": 1,
-          "amount": "100000",
+          "amount": 100000,
           "lenderId": 1
       },
       {
           "id": 2,
-          "amount": "200000",
+          "amount": 200000,
           "lenderId": 2
       }
     ],
