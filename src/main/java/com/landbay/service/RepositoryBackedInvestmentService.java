@@ -1,12 +1,13 @@
 package com.landbay.service;
 
 import com.landbay.calculator.InterestCalculator;
-import com.landbay.model.internal.*;
-import com.landbay.model.rest.InvestmentCreateRequest;
+import com.landbay.model.internal.InterestOwedCalculationInput;
+import com.landbay.model.internal.InterestOwedResult;
+import com.landbay.model.internal.Investment;
+import com.landbay.model.internal.Loan;
 import com.landbay.repository.InvestmentRepository;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -25,25 +26,20 @@ public class RepositoryBackedInvestmentService implements InvestmentService {
     }
 
     @Override
-    public Investment createInvestment(InvestmentCreateRequest investmentCreateRequest, Loan loan) {
+    public Investment createInvestment(long amount, Loan loan, int lenderId) {
         Investment investment = new Investment();
-        investment.setAmount(investmentCreateRequest.getAmount());
+        investment.setAmount(amount);
         investment.setLoan(loan);
-        investment.setLenderId(investmentCreateRequest.getLenderId());
-        investment.setStartDate(investmentCreateRequest.getStartDate());
-        investment.setEndDate(investmentCreateRequest.getEndDate());
+        investment.setLenderId(lenderId);
 
         return investmentRepository.save(investment);
     }
 
     @Override
-    public InterestOwedResult calculateInterestOwed(int lenderId, InvestmentPeriod investmentPeriod) {
+    public InterestOwedResult calculateInterestOwed(int lenderId) {
         Set<Investment> investments = investmentRepository.findByLenderId(lenderId);
 
-        LocalDate startDate = investmentPeriod.getStartDate();
-        LocalDate endDate = investmentPeriod.getEndDate();
         List<InterestOwedCalculationInput> interestOwedInputs = investments.stream()
-                .filter(investment -> withinStartDate(startDate, investment) && withinEndDate(endDate, investment))
                 .map(investment -> {
                     InterestOwedCalculationInput interestOwedCalculationInput = new InterestOwedCalculationInput();
                     interestOwedCalculationInput.setAmount(investment.getAmount());
@@ -54,15 +50,5 @@ public class RepositoryBackedInvestmentService implements InvestmentService {
                 .collect(toList());
 
         return interestCalculator.calculateInterest(interestOwedInputs);
-    }
-
-    private boolean withinStartDate(LocalDate startDate, Investment investment) {
-        LocalDate investmentStartDate = investment.getStartDate();
-        return investmentStartDate.isAfter(startDate) || investmentStartDate.isEqual(startDate);
-    }
-
-    private boolean withinEndDate(LocalDate endDate, Investment investment) {
-        LocalDate investmentEndDate = investment.getEndDate();
-        return investmentEndDate.isBefore(endDate) || investmentEndDate.isEqual(endDate);
     }
 }
