@@ -1,7 +1,8 @@
 package com.landbay.e2e;
 
-import com.landbay.model.dto.InvestableLoanDTO;
 import com.landbay.model.dto.InvestmentDTO;
+import com.landbay.model.dto.LoanWithInvestmentsDTO;
+import com.landbay.model.internal.InterestOwedResult;
 import com.landbay.model.internal.Loan;
 import com.landbay.model.rest.InvestmentCreateRequest;
 import com.landbay.repository.InvestmentRepository;
@@ -79,13 +80,30 @@ public class LoanEndToEndTest {
         createInvestment(investmentCreateRequestOne);
         createInvestment(investmentCreateRequestTwo);
 
-        InvestableLoanDTO investableLoan = getLoanDTO(loan.getId());
+        LoanWithInvestmentsDTO investableLoan = getLoanWithInvestments(loan.getId());
 
         assertThat(investableLoan.getInvestments(), hasItem(investmentAmount(1000)));
         assertThat(investableLoan.getInvestments(), hasItem(investmentAmount(2000)));
         assertThat(investableLoan.getInvestments(), hasSize(2));
         assertThat(investableLoan.getInvestments(), hasItem(investmentInto(loan)));
         assertThat(investableLoan.getInvestments(), hasItem(investmentBy(LENDER_ID)));
+    }
+
+    @Test
+    public void canGetMonthlyInterestOwedOnInvestments() {
+        Loan loan = createLoan(testLoanWithoutId());
+
+        InvestmentCreateRequest investmentCreateRequestOne = investmentCreateRequest(loan, 1000);
+        InvestmentCreateRequest investmentCreateRequestTwo = investmentCreateRequest(loan, 1000);
+
+        createInvestment(investmentCreateRequestOne);
+        createInvestment(investmentCreateRequestTwo);
+
+        getLoanWithInvestments(loan.getId());
+
+        InterestOwedResult monthlyInterestOwed = getMonthlyInterestOwed(LENDER_ID);
+
+        assertThat(monthlyInterestOwed.getTotal(), equalTo(5l));
     }
 
     private InvestmentCreateRequest investmentCreateRequest(Loan loan, int amount) {
@@ -135,11 +153,15 @@ public class LoanEndToEndTest {
         return restTemplate.getForObject("/api/loan/" + loan.getId(), Loan.class);
     }
 
-    private InvestableLoanDTO getLoanDTO(int loanId) {
-        return restTemplate.getForObject("/api/loan/" + loanId, InvestableLoanDTO.class);
+    private LoanWithInvestmentsDTO getLoanWithInvestments(int loanId) {
+        return restTemplate.getForObject("/api/loan/" + loanId, LoanWithInvestmentsDTO.class);
     }
 
     private Loan createLoan(Loan testLoan) {
         return restTemplate.postForObject("/api/loan", testLoan, Loan.class);
+    }
+
+    private InterestOwedResult getMonthlyInterestOwed(int lenderId) {
+        return restTemplate.getForObject("/api/investment/interest/" + lenderId, InterestOwedResult.class);
     }
 }

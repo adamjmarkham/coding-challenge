@@ -1,5 +1,6 @@
 package com.landbay.testdata;
 
+import com.landbay.model.internal.InterestOwedResult;
 import com.landbay.model.internal.Investment;
 import com.landbay.model.rest.InvestmentCreateRequest;
 
@@ -19,5 +20,9 @@ public class InvestmentTestData {
         investment.setLoan(LoanTestData.getTestLoan());
         investment.setLenderId(1);
         return investment;
+    }
+
+    public static InterestOwedResult interestOwedResult(long total) {
+        return new InterestOwedResult(total);
     }
 }

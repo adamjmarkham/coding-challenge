@@ -13,10 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.landbay.testdata.InvestmentTestData.interestOwedResult;
 import static com.landbay.testdata.InvestmentTestData.testInvestment;
 import static com.landbay.testdata.LoanTestData.getTestLoan;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InvestmentControllerTest {
 
     private static final Loan TEST_LOAN = getTestLoan();
+    private static final int LENDER_ID = 1;
+    private static final int TOTAL_INTEREST_OWED = 20;
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,6 +43,7 @@ public class InvestmentControllerTest {
     public void setup() {
         given(loanService.getLoan(1)).willReturn(TEST_LOAN);
         given(investmentService.createInvestment(1000, TEST_LOAN, 1)).willReturn(testInvestment());
+        given(investmentService.calculateInterestOwed(LENDER_ID)).willReturn(interestOwedResult(TOTAL_INTEREST_OWED));
 
     }
 
@@ -75,6 +80,24 @@ public class InvestmentControllerTest {
                 .andExpect(jsonPath("loan.propertyAddress.street", is("London Road")))
                 .andExpect(jsonPath("loan.propertyAddress.city", is("London")))
                 .andExpect(jsonPath("loan.propertyAddress.postCode", is("CR7 7PB")));
+    }
+
+    @Test
+    public void getMonthlyInterestReturns200() throws Exception {
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getMonthlyInterestReturnsContentType() throws Exception {
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+    }
+
+    @Test
+    public void getMonthlyInterestReturnsJson() throws Exception {
+        mockMvc.perform(get("/api/investment/interest/" + LENDER_ID))
+                .andExpect(jsonPath("total", is(TOTAL_INTEREST_OWED)));
     }
 
     private String testInvestmentCreateJson() {

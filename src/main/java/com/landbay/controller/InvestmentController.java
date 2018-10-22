@@ -1,6 +1,7 @@
 package com.landbay.controller;
 
 import com.landbay.model.dto.InvestmentDTO;
+import com.landbay.model.internal.InterestOwedResult;
 import com.landbay.model.internal.Investment;
 import com.landbay.model.internal.Loan;
 import com.landbay.model.rest.InvestmentCreateRequest;
@@ -9,10 +10,7 @@ import com.landbay.service.LoanService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/investment")
@@ -36,6 +34,13 @@ public class InvestmentController {
         Investment investment = investmentService.createInvestment(amount, loan, lenderId);
 
         return new ResponseEntity<>(convertToDTO(investment), HttpStatus.OK);
+    }
+
+    @GetMapping("/interest/{lenderId}")
+    public ResponseEntity<InterestOwedResult> interestOwed(@PathVariable(value = "lenderId") int lenderId) {
+        InterestOwedResult interestOwedResult = investmentService.calculateInterestOwed(lenderId);
+
+        return new ResponseEntity<>(interestOwedResult, HttpStatus.OK);
     }
 
     private InvestmentDTO convertToDTO(Investment investment) {

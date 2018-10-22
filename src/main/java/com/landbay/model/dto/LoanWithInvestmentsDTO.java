@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
 
-public class InvestableLoanDTO {
+public class LoanWithInvestmentsDTO {
 
     private Integer id;
     private long amount;
@@ -75,8 +75,8 @@ public class InvestableLoanDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
-        if (!(o instanceof InvestableLoanDTO)) { return false; }
-        InvestableLoanDTO loan = (InvestableLoanDTO) o;
+        if (!(o instanceof LoanWithInvestmentsDTO)) { return false; }
+        LoanWithInvestmentsDTO loan = (LoanWithInvestmentsDTO) o;
         return amount == loan.amount &&
                 term == loan.term &&
                 Objects.equals(id, loan.id) &&
