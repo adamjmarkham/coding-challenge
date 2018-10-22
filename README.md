@@ -7,8 +7,10 @@
 * All amounts are stored in pennies to avoid rounding errors
 * All interest made on loan goes back to investors (no cut for Landbay)
 * Each investment made into a loan is unique
-* Validation of fields is not required
+* Validation of fields is not required and users will put in sensible values for this challenge
 * In memory database (non-production) is used when application starts up
+* Step 3 says investments are valid for a day so we need to calculate interest per day for investment rather than monthly and return total over a specified period
+* Assume that a year has 365 days for purpose of this challenge
 
 ## How to run
 
@@ -125,6 +127,7 @@ loanId - id of loan to delete
 **URL** : `/api/investment/{loanId}`
 
 loanId - id of loan to invest into
+lenderId - id of lender that is making the investment
 
 **Method** : `POST`
 
@@ -132,7 +135,9 @@ loanId - id of loan to invest into
 
 ```json
 {
-    "amount": 100000
+    "amount": 100000,
+    "loanId": 1,
+    "lenderId": 1
 }
 ```
 
@@ -145,6 +150,38 @@ loanId - id of loan to invest into
 ```json
 {
     "id": 1,
-    "amount": 100000
+    "loan": {
+      // loan object without investments
+    }
+}
+```
+
+## Get interest owed on investments over a time period
+
+**URL** : `/api/investment/interest/{lenderId}?start={start}&end={end}`
+
+lenderId - id of lender that is making the investment
+start - start period to calculate interest
+end - end period to calculate interest
+
+**Method** : `GET`
+
+**Data examples:**
+
+```
+/api/investment/interest/1?start=2018-10-21&end=2018-11-2018
+```
+
+### Success Response
+
+**Code** : `200 OK`
+
+total - interest owed over that time period
+
+**Content examples:**
+
+```json
+{
+    "total": 800
 }
 ```
